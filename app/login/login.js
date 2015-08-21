@@ -29,6 +29,8 @@ angular.module('myApp.login', ['firebase.utils', 'firebase.auth', 'ngRoute', 'lv
       if( assertValidAccountProps() ) {
         var email = $scope.email;
         var pass = $scope.pass;
+        // creates a unique id for the user
+        var uid = uuid.new();
         // create user credentials in Firebase auth system
         Auth.$createUser({email: email, password: pass})
           .then(function() {
@@ -36,9 +38,6 @@ angular.module('myApp.login', ['firebase.utils', 'firebase.auth', 'ngRoute', 'lv
             return Auth.$authWithPassword({ email: email, password: pass });
           })
           .then(function(user) {
-            // creates a unique id for the user
-            var uid = uuid.new();
-            //console.log(uid);
             // create a user profile in our data store
             var ref = fbutil.ref('users', user.uid);
             return fbutil.handler(function(cb) {
